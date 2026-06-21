@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
-import { Shield, ShieldAlert, Award, QrCode, MapPin, User, Clock, Copy, Check, ChevronRight, RefreshCw } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Shield, ShieldAlert, ShieldCheck, Award, QrCode, MapPin, Copy, Check } from "lucide-react";
 import { PremiumPass, PassState } from "../types";
 import { StatusBadge } from "./StatusBadge";
 import { CountdownTimer } from "./CountdownTimer";
@@ -18,6 +18,11 @@ interface PremiumPassCardProps {
 export function PremiumPassCard({ pass, onExpire }: PremiumPassCardProps) {
   const [copied, setCopied] = useState(false);
   const [flipped, setFlipped] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [pass.imageUrl]);
 
   const handleCopySeal = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -92,6 +97,37 @@ export function PremiumPassCard({ pass, onExpire }: PremiumPassCardProps) {
           {/* Accent Separator with gold gradient */}
           <div className={`w-full h-[1px] ${theme.accentLine} opacity-80 mb-5 relative z-10`} />
 
+          {pass.imageUrl && !imageFailed ? (
+            <div className="relative z-10 mb-5 overflow-hidden rounded-[18px] border border-kairos-gold/20 bg-black shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
+              <img
+                src={pass.imageUrl}
+                alt={pass.assetName}
+                className="h-[210px] w-full object-contain"
+                onError={() => setImageFailed(true)}
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/85 to-transparent px-3 py-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-kairos-gold/35 bg-black/70 px-2.5 py-1 text-[8px] font-mono uppercase tracking-[0.18em] text-kairos-champagne backdrop-blur-sm">
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#28A0F0]/15 text-[#28A0F0] ring-1 ring-[#28A0F0]/35">
+                    <ShieldCheck className="h-3 w-3" />
+                  </span>
+                  ARB Verified
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="relative z-10 mb-5 flex h-[210px] flex-col items-center justify-center overflow-hidden rounded-[18px] border border-kairos-gold/20 bg-[radial-gradient(circle_at_top,#2b2110_0%,#070707_58%,#000_100%)] px-5 text-center shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
+              <span className="text-[8px] font-mono uppercase tracking-[0.28em] text-kairos-gold">
+                NFT Visual
+              </span>
+              <strong className="mt-3 font-display text-lg leading-tight text-kairos-champagne">
+                {pass.venueName}
+              </strong>
+              <span className="mt-2 text-[9px] font-mono uppercase tracking-[0.2em] text-stone-500">
+                ARB Verified
+              </span>
+            </div>
+          )}
+
           {/* Card Body - Dual States via Flip */}
           {!flipped ? (
             // FRONT: Details
@@ -124,6 +160,16 @@ export function PremiumPassCard({ pass, onExpire }: PremiumPassCardProps) {
                   <p className="text-[10px] text-stone-500 font-mono tracking-wider mt-0.5">
                     Tipo: <span className="text-stone-300 font-sans">{pass.assetType}</span>
                   </p>
+                  {pass.explorerUrl ? (
+                    <a
+                      href={pass.explorerUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 inline-flex text-[9px] font-mono uppercase tracking-widest text-kairos-gold hover:text-white"
+                    >
+                      Ver token en Arbiscan
+                    </a>
+                  ) : null}
                 </div>
 
                 {/* Grid for User and Window */}
@@ -131,7 +177,7 @@ export function PremiumPassCard({ pass, onExpire }: PremiumPassCardProps) {
                   {/* Authorized User */}
                   <div>
                     <span className={`text-[9px] uppercase font-mono tracking-widest block mb-0.5 ${theme.cardLabel}`}>
-                      Invitado
+                      Emisor
                     </span>
                     <p className={`font-sans text-xs font-semibold tracking-wide ${theme.cardValue} truncate`}>
                       {pass.authorizedUser}
@@ -141,7 +187,7 @@ export function PremiumPassCard({ pass, onExpire }: PremiumPassCardProps) {
                   {/* Access Time Window */}
                   <div>
                     <span className={`text-[9px] uppercase font-mono tracking-widest block mb-0.5 ${theme.cardLabel}`}>
-                      Horario
+                      Día y hora
                     </span>
                     <p className={`font-sans text-xs font-medium tracking-wide ${theme.cardValue}`}>
                       {pass.startDateTime}
@@ -179,6 +225,11 @@ export function PremiumPassCard({ pass, onExpire }: PremiumPassCardProps) {
                     <span className={`font-mono text-[10px] tracking-widest font-medium ${theme.sealColor}`}>
                       {shortSeal}
                     </span>
+                    {pass.contactDetails ? (
+                      <span className="mt-1 text-[8px] font-mono tracking-wider text-stone-600">
+                        {pass.contactDetails}
+                      </span>
+                    ) : null}
                   </div>
                   <button
                     onClick={handleCopySeal}
@@ -268,6 +319,11 @@ export function PremiumPassCard({ pass, onExpire }: PremiumPassCardProps) {
                 <p className="font-mono text-[9px] tracking-wider text-stone-400 break-all select-all leading-relaxed whitespace-pre-wrap">
                   {pass.digitalSeal}
                 </p>
+                {pass.tokenURI ? (
+                  <p className="mt-2 font-mono text-[8px] tracking-wider text-stone-600 break-all select-all leading-relaxed">
+                    {pass.tokenURI}
+                  </p>
+                ) : null}
                 
                 <button
                   onClick={handleCopySeal}

@@ -21,4 +21,11 @@ export interface PremiumPass {
   expiresAt: string; // ISO string of expiration time
   status: PassState;
   digitalSeal: string; // Full hex value
+  tokenId?: number;
+  tokenURI?: string;
+  imageUrl?: string;
+  contractAddress?: string;
+  explorerUrl?: string;
+  ownerAddress?: string;
+  userAddress?: string;
 }
