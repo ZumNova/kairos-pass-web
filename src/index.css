@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cinzel", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom colors matching the gold luxury palette */
+  --color-kairos-gold: #B4882A;
+  --color-kairos-dark-gold: #8F6A1D;
+  --color-kairos-champagne: #D8B56A;
+  --color-kairos-black: #000000;
+  --color-kairos-graphite: #121212;
+  --color-kairos-charcoal: #1A1A1A;
+  --color-kairos-off-white: #F5F5F5;
+  --color-kairos-emerald: #2FA772;
+  --color-kairos-crimson: #B84C4C;
+
+  /* Custom gradients or shadows can be represented as classes or variables */
+}
+
+@layer base {
+  body {
+    background-color: #000000;
+    color: #F5F5F5;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Luxury metallic reflection overlay pulse effect */
+@keyframes metallic-sweep {
+  0% {
+    transform: translateX(-100%) rotate(25deg);
+  }
+  100% {
+    transform: translateX(200%) rotate(25deg);
+  }
+}
+
+.metallic-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.metallic-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 150%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(216, 181, 106, 0.08) 25%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(216, 181, 106, 0.08) 75%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  animation: metallic-sweep 9s infinite linear;
+}
+
+/* Custom scrollbars for high-end look */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+::-webkit-scrollbar-thumb {
+  background: #B4882A;
+  border-radius: 3px;
+}

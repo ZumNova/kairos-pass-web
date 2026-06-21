@@ -1,0 +1,6 @@
+{
+  "name": "KAIROS Protocol",
+  "description": "Transforming time-limited usage rights into premium, personal and verifiable digital passes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
